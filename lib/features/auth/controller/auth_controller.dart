@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/features/auth/repository/auth_repository.dart';
 
 import '../../../core/utils.dart';
+import '../../../models/user_model.dart';
 
 //Provider
 final authControllerProvider = StateNotifierProvider<AuthController, bool>(
@@ -18,7 +19,12 @@ final authStateChangeProvider = StreamProvider((ref) {
   return authController.authStateChange;
 });
 
-class AuthController extends StateNotifier<bool> {
+final getUserDataProvider = StreamProvider.family((ref, String uid) {
+  final authController = ref.watch(authControllerProvider.notifier);
+  return authController.getUserData(uid);
+});
+
+final class AuthController extends StateNotifier<bool> {
   final AuthRepository _authRepository;
   final Ref _ref;
   AuthController({required AuthRepository authRepository, required Ref ref})
@@ -36,5 +42,9 @@ class AuthController extends StateNotifier<bool> {
         (l) => showSnackBar(context, l.message),
         (userModel) =>
             _ref.read(userProvider.notifier).update((state) => userModel));
+  }
+
+  Stream<UserModel> getUserData(String uid) {
+    return _authRepository.getUserData(uid);
   }
 }
