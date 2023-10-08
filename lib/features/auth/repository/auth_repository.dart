@@ -1,3 +1,4 @@
+// this file will hold the all firebase calls for auth
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,16 +7,13 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/core/constants/firebase_constants.dart';
 import 'package:reddit_clone/core/failure.dart';
-import 'package:reddit_clone/core/providers/firbase_providers.dart';
-import 'package:reddit_clone/features/auth/models/app_user.dart';
-import 'package:reddit_clone/models/user_model.dart';
-import '../../../core/type_defs.dart';
-
-final userProvider = StateProvider<UserModel?>((ref) => null);
+import 'package:reddit_clone/core/providers/firebase_providers.dart';
+import 'package:reddit_clone/core/type_def.dart';
+import 'package:reddit_clone/model/user_model.dart';
 
 final authRepositoryProvider = Provider(
   (ref) => AuthRepository(
-    firestore: ref.read(firestoreProvider),
+    firestore: ref.read(fireStoreProvider),
     auth: ref.read(authProvider),
     googleSignIn: ref.read(googleSignInProvider),
   ),
@@ -31,27 +29,24 @@ class AuthRepository {
     required FirebaseAuth auth,
     required GoogleSignIn googleSignIn,
   })  : _auth = auth,
-        _firestore = firestore,
-        _googleSignIn = googleSignIn;
+        _googleSignIn = googleSignIn,
+        _firestore = firestore;
 
   CollectionReference get _users =>
-      _firestore.collection(FirebaseConstants.usersCollection);
+      _firestore.collection(FirebaseConstants.userCollection);
 
   Stream<User?> get authStateChange => _auth.authStateChanges();
+
   FutureEither<UserModel> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-
       final googleAuth = await googleUser?.authentication;
-
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
       );
-
       UserCredential userCredential =
           await _auth.signInWithCredential(credential);
-
       UserModel userModel;
 
       if (userCredential.additionalUserInfo!.isNewUser) {
@@ -72,7 +67,7 @@ class AuthRepository {
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
-      return left(Failure(message: e.toString()));
+      return left(Failure(e.toString()));
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:reddit_clone/core/constants/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 
 class LoginScreen extends ConsumerWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -21,21 +21,21 @@ class LoginScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () {},
-            child: Text(
+            child: const Text(
               'Skip',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ],
       ),
       body: isLoading
-          ? Loader()
+          ? const Loader()
           : Column(
               children: [
-                SizedBox(
-                  height: 30,
-                ),
-                Text(
+                const SizedBox(height: 30),
+                const Text(
                   "Dive into anything",
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -43,20 +43,16 @@ class LoginScreen extends ConsumerWidget {
                     letterSpacing: 0.5,
                   ),
                 ),
-                SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.asset(
-                    Constants.loginEmotePath,
+                    Constants.loginEmote,
                     height: 400,
                   ),
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                SignInButton(),
+                const SizedBox(height: 20),
+                const SignInButton(),
               ],
             ),
     );

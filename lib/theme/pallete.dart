@@ -23,7 +23,8 @@ class Pallete {
       backgroundColor: drawerColor,
     ),
     primaryColor: redColor,
-    backgroundColor: drawerColor, // will be used as alternative background color
+    backgroundColor:
+        drawerColor, // will be used as alternative background color
   );
 
   static var lightModeAppTheme = ThemeData.light().copyWith(

@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:reddit_clone/features/auth/controller/community_controller.dart';
-import 'package:reddit_clone/features/community/repository/community_repository.dart';
-import 'package:reddit_clone/models/community_model.dart';
+import 'package:reddit_clone/features/community/controller/community_controller.dart';
 
-final communityControllerProvider =
-    StateNotifierProvider<CommunityController, bool>((ref) {
-  final communityRepository = ref.watch(communityRepositoryProvider);
-  return CommunityController(
-    communityRepository: communityRepository,
-    ref: ref,
-  );
-});
+import '../../../core/common/loader.dart';
 
 class CreateCommunityScreen extends ConsumerStatefulWidget {
-  const CreateCommunityScreen({Key? key}) : super(key: key);
+  const CreateCommunityScreen({super.key});
 
   @override
-  ConsumerState<CreateCommunityScreen> createState() =>
+  ConsumerState<ConsumerStatefulWidget> createState() =>
       _CreateCommunityScreenState();
 }
 
@@ -29,26 +20,33 @@ class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
     communityNameController.dispose();
   }
 
+  void createCommunity() {
+    ref.read(communityControllerProvider.notifier).createCommunity(
+          communityNameController.text.trim(),
+          context,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
+    //final isLoading = ref.watch(communityControllerProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create a Community'),
+        title: const Text("Create a Community"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: Column(
+          //crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
+            const Align(
               alignment: Alignment.topLeft,
-              child: Text("Community Name"),
+              child: Text('Community name'),
             ),
-            SizedBox(
-              height: 10,
-            ),
+            const SizedBox(height: 10),
             TextField(
               controller: communityNameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'r/Community_name',
                 filled: true,
                 border: InputBorder.none,
@@ -56,17 +54,15 @@ class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
               ),
               maxLength: 21,
             ),
-            SizedBox(
-              height: 30,
-            ),
+            const SizedBox(height: 30),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                  minimumSize: Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   )),
-              onPressed: () {},
-              child: Text(
+              onPressed: createCommunity,
+              child: const Text(
                 "Create Community",
                 style: TextStyle(
                   fontSize: 17,
