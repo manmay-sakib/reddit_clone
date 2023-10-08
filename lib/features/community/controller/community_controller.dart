@@ -7,6 +7,11 @@ import 'package:reddit_clone/model/community_model.dart';
 import 'package:routemaster/routemaster.dart';
 import '../../../core/utils.dart';
 
+final userCommunitiesProvider = StreamProvider((ref) {
+  final communityController = ref.watch(communityControllerProvider.notifier);
+  return communityController.getUserCommunities();
+});
+
 final communityControllerProvider =
     StateNotifierProvider<CommunityController, bool>((ref) {
   final communityRepository = ref.watch(communityRepositoryProvider);
