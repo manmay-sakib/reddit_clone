@@ -34,7 +34,7 @@ class CommunityRepository {
     }
   }
 
-  Stream<List<Community>> getUserCommunites(String uid) {
+  Stream<List<Community>> getUserCommunities(String uid) {
     return _communities
         .where('members', arrayContains: uid)
         .snapshots()
@@ -45,6 +45,12 @@ class CommunityRepository {
       }
       return communities;
     });
+  }
+
+  Stream<Community> getCommunityByName(String name) {
+    return _communities.doc(name).snapshots().map(
+          (event) => Community.fromMap(event.data() as Map<String, dynamic>),
+        );
   }
 
   CollectionReference get _communities =>
