@@ -16,6 +16,8 @@ class Community {
     required this.mods,
   });
 
+  get length => null;
+
   Community copyWith({
     String? id,
     String? name,

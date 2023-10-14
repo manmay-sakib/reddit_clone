@@ -31,6 +31,12 @@ final getCommunityByNameProvider = StreamProvider.family((ref, String name) {
       .getCommunityByName(name);
 });
 
+final searchCommunityProvider = StreamProvider.family((ref, String name) {
+  return ref
+      .watch(communityControllerProvider.notifier)
+      .getCommunityByName(name);
+});
+
 class CommunityController extends StateNotifier<bool> {
   final CommunityRepository _communityRepository;
   final Ref _ref;
@@ -110,5 +116,9 @@ class CommunityController extends StateNotifier<bool> {
 
     res.fold((l) => showSnackBar(context, l.message),
         (r) => Routemaster.of(context).pop());
+  }
+
+  Stream<List<Community>> searchCommunity(String query) {
+    return _communityRepository.searchCommunity(query);
   }
 }
