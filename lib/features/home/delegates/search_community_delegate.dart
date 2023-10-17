@@ -6,8 +6,9 @@ import 'package:reddit_clone/features/community/controller/community_controller.
 import 'package:routemaster/routemaster.dart';
 
 class SearchCommunityDelegate extends SearchDelegate {
-  final Ref ref;
+  final WidgetRef ref;
   SearchCommunityDelegate(this.ref);
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -36,7 +37,7 @@ class SearchCommunityDelegate extends SearchDelegate {
         data: (communites) => ListView.builder(
               itemCount: communites.length,
               itemBuilder: (BuildContext context, int index) {
-                final community = communites[index];
+                final community = communites;
                 return ListTile(
                   leading: CircleAvatar(
                     backgroundImage: NetworkImage(community.avatar),
