@@ -33,7 +33,7 @@ class AuthRepository {
         _firestore = firestore;
 
   CollectionReference get _users =>
-      _firestore.collection(FirebaseConstants.userCollection);
+      _firestore.collection(FirebaseConstants.usersCollection);
 
   Stream<User?> get authStateChange => _auth.authStateChanges();
 
