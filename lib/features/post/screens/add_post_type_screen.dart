@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/common/error_text.dart';
 import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
+import 'package:reddit_clone/features/post/controller/post_controller.dart';
 import 'package:reddit_clone/theme/pallete.dart';
 
 import '../../../core/utils.dart';
@@ -45,6 +46,19 @@ class _AddPostTypeScreenState extends ConsumerState<AddPostTypeScreen> {
       setState(() {
         bannerFile = File(res.files.first.path!);
       });
+    }
+  }
+
+  void sharePost() {
+    if (widget.type == 'image' &&
+        bannerFile != null &&
+        titleController.text.isEmpty) {
+      ref.read(postControllerProvider.notifier).shareImagePost(
+            context: context,
+            title: titleController.text.trim(),
+            selectedCommunity: selectedCommunity ?? communities[0],
+            file: bannerFile,
+          );
     }
   }
 

@@ -48,6 +48,7 @@ dependencies:
   dotted_border: ^2.1.0
   file_picker: ^6.0.0
   shared_preferences: ^2.2.2
+  uuid: ^4.1.0
 
 dev_dependencies:
   flutter_test:
