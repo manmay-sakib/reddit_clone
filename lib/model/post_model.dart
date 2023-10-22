@@ -12,7 +12,7 @@ class Post {
   final int commentCount;
   final String username;
   final String uid;
-  final String type;
+  late final String type;
   final DateTime createdAt;
   final List<String> awards;
 

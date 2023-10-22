@@ -22,8 +22,12 @@ class FeedScreen extends ConsumerWidget {
                     itemCount: data.length,
                   );
                 },
-                error: (error, stackTrace) =>
-                    ErrorText(error: error.toString()),
+                error: (error, stackTrace) {
+                  print(error);
+                  return ErrorText(
+                    error: error.toString(),
+                  );
+                },
                 loading: () => const Loader(),
               ),
           error: (error, stackTrace) => ErrorText(error: error.toString()),
