@@ -124,7 +124,7 @@ class PostController extends StateNotifier<bool> {
     );
     imagesRes.fold((l) => showSnackBar(context, l.message), (r) async {
       final Post post = Post(
-        type: 'text',
+        type: 'image',
         uid: user.uid,
         communityName: selectedCommunity.name,
         id: postId,
@@ -153,5 +153,21 @@ class PostController extends StateNotifier<bool> {
       return _postRepository.fetchUserPosts(communities);
     }
     return Stream.value([]);
+  }
+
+  void deletePost(Post post, BuildContext context) async {
+    final res = await _postRepository.deletePost(post);
+    res.fold((l) => null,
+        (r) => showSnackBar(context, 'Post Deleted Successfully!'));
+  }
+
+  void upvote(Post post) async {
+    final uid = _ref.read(userProvider)!.uid;
+    _postRepository.upvote(post, uid);
+  }
+
+  void downvote(Post post) async {
+    final uid = _ref.read(userProvider)!.uid;
+    _postRepository.downvote(post, uid);
   }
 }
