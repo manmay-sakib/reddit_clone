@@ -9,6 +9,7 @@ import 'package:reddit_clone/model/user_model.dart';
 import 'package:routemaster/routemaster.dart';
 
 import '../../../core/utils.dart';
+import '../../../model/post_model.dart';
 
 final userProfileControllerProvider =
     StateNotifierProvider<UserProfileController, bool>((ref) {
@@ -19,6 +20,10 @@ final userProfileControllerProvider =
     ref: ref,
     storageRepository: storageRepository,
   );
+});
+
+final getUserPostsProvider = StreamProvider.family((ref, String uid) {
+  return ref.read(userProfileControllerProvider.notifier).getUserPosts(uid);
 });
 
 class UserProfileController extends StateNotifier<bool> {
@@ -71,5 +76,9 @@ class UserProfileController extends StateNotifier<bool> {
       _ref.read(userProvider.notifier).update((state) => user);
       Routemaster.of(context).pop();
     });
+  }
+
+  Stream<List<Post>> getUserPosts(String uid) {
+    return _userProfileRepository.getUserPosts(uid);
   }
 }

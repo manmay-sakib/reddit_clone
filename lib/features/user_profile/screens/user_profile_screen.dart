@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/core/common/post_card.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
+import 'package:reddit_clone/features/user_profile/controller/user_profile_controller.dart';
 import 'package:routemaster/routemaster.dart';
 
 import '../../../core/common/error_text.dart';
@@ -70,7 +72,7 @@ class UserProfileScreen extends ConsumerWidget {
                     ),
                   ),
                   SliverPadding(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     sliver: SliverList(
                       delegate: SliverChildListDelegate(
                         [
@@ -98,7 +100,22 @@ class UserProfileScreen extends ConsumerWidget {
                   ),
                 ];
               },
-              body: Container(),
+              body: ref.watch(getUserPostsProvider(uid)).when(
+                    data: (data) {
+                      return ListView.builder(
+                        itemBuilder: (BuildContext context, int index) {
+                          final post = data[index];
+                          return PostCard(post: post);
+                        },
+                        itemCount: data.length,
+                      );
+                    },
+                    error: (error, stackTrace) {
+                      print(error.toString());
+                      return ErrorText(error: error.toString());
+                    },
+                    loading: () => const Loader(),
+                  ),
             ),
             error: (error, stackTrace) => ErrorText(error: error.toString()),
             loading: () => const Loader(),
