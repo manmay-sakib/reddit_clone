@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/providers/storage_repository_provider.dart';
@@ -8,6 +7,7 @@ import 'package:reddit_clone/features/post/repository/post_repository.dart';
 import 'package:reddit_clone/model/community_model.dart';
 import 'package:routemaster/routemaster.dart';
 import 'package:uuid/uuid.dart';
+import 'package:reddit_clone/model/comment_model.dart';
 
 import '../../../model/post_model.dart';
 import '../../auth/controller/auth_controller.dart';
@@ -178,5 +178,24 @@ class PostController extends StateNotifier<bool> {
 
   Stream<Post> getPostById(String postId) {
     return _postRepository.getPostById(postId);
+  }
+
+  void addComment(
+      {required BuildContext context,
+      required String text,
+      required Post post}) async {
+    final user = _ref.read(userProvider)!;
+    String commentId = const Uuid().v1();
+    Comment comment = Comment(
+      id: commentId,
+      text: text,
+      createdAt: DateTime.now(),
+      postId: post.id,
+      username: user.name,
+      profilePic: user.profilePic,
+    );
+
+    final res = await _postRepository.addComment(comment);
+    res.fold((l) => showSnackBar(context, l.message), (r) => null);
   }
 }

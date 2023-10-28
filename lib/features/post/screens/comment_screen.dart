@@ -5,6 +5,8 @@ import 'package:reddit_clone/core/common/loader.dart';
 import 'package:reddit_clone/core/common/post_card.dart';
 import 'package:reddit_clone/features/post/controller/post_controller.dart';
 
+import '../../../model/post_model.dart';
+
 class CommentScreen extends ConsumerStatefulWidget {
   final String postId;
   const CommentScreen({
@@ -24,6 +26,17 @@ class _CommentScreenState extends ConsumerState<CommentScreen> {
     commentController.dispose();
   }
 
+  void addComment(Post post) {
+    ref.read(postControllerProvider.notifier).addComment(
+          context: context,
+          text: commentController.text.trim(),
+          post: post,
+        );
+    setState(() {
+      commentController.text = '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +47,7 @@ class _CommentScreenState extends ConsumerState<CommentScreen> {
                 children: [
                   PostCard(post: data),
                   TextField(
+                    onSubmitted: (val) => addComment(data),
                     controller: commentController,
                     decoration: const InputDecoration(
                       hintText: 'What are you thoughts?',
