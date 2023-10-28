@@ -111,7 +111,10 @@ class PostRepository {
 
   FutureVoid addComment(Comment comment) async {
     try {
-      return right(_comments.doc(comment.id).set(comment.toMap()));
+      await _comments.doc(comment.id).set(comment.toMap());
+      return right(_posts.doc(comment.postId).update({
+        'commentCount': FieldValue.increment(1),
+      }));
     } on FirebaseException catch (e) {
       throw e.message!;
     } catch (e) {
@@ -124,12 +127,14 @@ class PostRepository {
         .where('postId', isEqualTo: postId)
         .orderBy('createdAt', descending: true)
         .snapshots()
-        .map((event) => event.docs
-            .map(
-              (e) => Comment.fromMap(
-                e.data() as Map<String, dynamic>,
-              ),
-            )
-            .toList());
+        .map(
+          (event) => event.docs
+              .map(
+                (e) => Comment.fromMap(
+                  e.data() as Map<String, dynamic>,
+                ),
+              )
+              .toList(),
+        );
   }
 }
