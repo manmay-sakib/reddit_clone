@@ -39,6 +39,10 @@ class PostCard extends ConsumerWidget {
     Routemaster.of(context).push('/r/${post.communityName}');
   }
 
+  void navigateToComments(BuildContext context) {
+    Routemaster.of(context).push('/post/${post.id}/comments');
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isTypeText = post.type == 'text';
@@ -205,7 +209,9 @@ class PostCard extends ConsumerWidget {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      navigateToComments(context);
+                                    },
                                     icon: Icon(
                                       Icons.comment,
                                       size: 30,
@@ -253,7 +259,10 @@ class PostCard extends ConsumerWidget {
               ),
             ],
           ),
-        )
+        ),
+        const SizedBox(
+          height: 10,
+        ),
       ],
     );
   }
