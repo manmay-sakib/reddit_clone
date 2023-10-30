@@ -28,9 +28,7 @@ class CommunityListDrawer extends ConsumerWidget {
         child: Column(
           children: [
             isGuest
-                ? const SignInButton(
-                    isFromLogin: false,
-                  )
+                ? const SignInButton()
                 : ListTile(
                     title: const Text("Create a Community"),
                     leading: const Icon(Icons.add),

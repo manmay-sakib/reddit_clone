@@ -59,6 +59,22 @@ class PostRepository {
         );
   }
 
+  Stream<List<Post>> fetchGuestPosts() {
+    return _posts
+        .orderBy('createdAt', descending: true)
+        .limit(10)
+        .snapshots()
+        .map(
+          (event) => event.docs
+              .map(
+                (e) => Post.fromMap(
+                  e.data() as Map<String, dynamic>,
+                ),
+              )
+              .toList(),
+        );
+  }
+
   Future deletePost(Post post) async {
     try {
       return right(_posts.doc(post.id).delete());
