@@ -20,6 +20,7 @@ final communityControllerProvider =
     StateNotifierProvider<CommunityController, bool>((ref) {
   final communityRepository = ref.watch(communityRepositoryProvider);
   final storageRepository = ref.watch(storageRepositoryProvider);
+  //
   return CommunityController(
     communityRepository: communityRepository,
     ref: ref,
